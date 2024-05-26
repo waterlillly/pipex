@@ -1,0 +1,15 @@
+FRANCINETTE INSTALL:
+bash -c "$(curl -fsSL https://raw.github.com/xicodomingues/francinette/master/bin/install.sh)"
+
+UPDATE:
+francinette -u 
+
+ALIAS:
+alias paco="$HOME"/francinette/tester.sh
+
+NORMINETTE INSTALL:
+python3 -m pip install --upgrade pip setuptools
+python3 -m pip install norminette
+
+UPDATE:
+python3 -m pip install --upgrade norminette
