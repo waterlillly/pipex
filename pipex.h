@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 20:02:40 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/27 07:38:33 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/02 20:34:43 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@
 # include <string.h>
 # include <stdio.h>
 # include <fcntl.h>
+
+typedef struct pipex
+{
+    int     fd[2];
+    int     file1;
+    int     file2;
+    char    *path;
+    char    **paths;
+    char    *cmd1;
+    char    *cmd2;
+    char    *file1_name;
+    char    *file2_name;
+    char    **envp;
+}           pipex;
 
 int 	child(char **av, int *fd, char **envp);
 int     parent(char **av, int *fd, char **envp);

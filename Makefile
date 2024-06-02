@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+         #
+#    By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 20:02:31 by lbaumeis          #+#    #+#              #
-#    Updated: 2024/05/26 21:57:17 by lbaumeis         ###   ########.fr        #
+#    Updated: 2024/06/02 17:30:25 by lbaumeis         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,6 @@ clean:
 
 fclean: clean
 	rm -f $(P_NAME)
-	rm -f a.out
 
 re: fclean all
 

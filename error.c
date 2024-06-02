@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:47:39 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/27 07:37:57 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/02 17:54:17 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,3 +34,16 @@ void	free_exec(char *executable)
 	free(executable);
 	executable = NULL;
 }
+/*
+int unlink_file()
+{
+	char *file;
+
+	file = "example.txt";
+	if (unlink("example.txt") == 0)
+		ft_printf("File successfully deleted");
+	else
+		ft_printf("Error deleting file");
+	return (0);
+}
+*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/27 07:20:30 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/02 17:48:03 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ int	child(char **av, int *fd, char **envp)
 	int	file1;
 
 	close(fd[0]);
-	file1 = open(av[1], O_RDONLY, 0777);
+	file1 = open(av[1], O_RDONLY, 0644);
 	if (file1 == -1)
 		return (err_log(3));
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(file1, STDIN_FILENO);
-	close(fd[1]);
 	if (exec_cmd(av[2], envp) == -1)
 		return (-1);
+	//write(fd[1], getpid(), ft_strlen(getpid()));
+	close(fd[1]);
 	return (0);
 }
 

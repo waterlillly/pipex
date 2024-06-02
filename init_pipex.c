@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/26 16:40:28 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/02 17:44:53 by lbaumeis         ###   ########.fr       */
+/*   Created: 2024/06/02 20:33:29 by lbaumeis          #+#    #+#             */
+/*   Updated: 2024/06/02 20:36:57 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int main(int ac, char **av, char **envp)
+void    init_pipex(pipex *p, char **av, char **envp)
 {
-	int 	fd[2];
-	pid_t	id;
-
-	if (ac != 5)
-		return (err_log(1));
-	if (pipe(fd) == -1)
-		return (err_log(2));
-	id = fork();
-	if (id == 0)
-	{
-		if (child(av, fd, envp) == -1)
-			return (err_log(5));
-	}
-	else
-	{
-		waitpid(id, NULL, 0);
-		if (parent(av, fd, envp) == -1)
-			return (err_log(6));
-	}
-	return (0);
+    p->fd[0] = 0;
+    p->fd[1] = 0;
+    p->file1 = av[1];
+    p->file2 = av[4];
+    p->cmd1 = av[2];
+    p->cmd2 = av[3];
+    p->envp = envp;
 }
