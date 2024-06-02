@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 20:02:40 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/26 21:56:55 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/05/27 07:38:33 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char	*find_path(char *cmd, char **envp);
 char	*is_exec(char *cmd, char **paths);
 int	    exec_cmd(char *cmd, char **envp);
 int     err_log(int x);
+void	free_exec(char *exectuable);
 
 //open, close, read, write, malloc, free, perror, stderror, dup, dup2, access, execve, exit, fork, pipe, wait, waitpid, unlink
 

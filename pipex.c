@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/26 21:56:48 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/05/27 07:20:30 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	child(char **av, int *fd, char **envp)
 	dup2(file1, STDIN_FILENO);
 	close(fd[1]);
 	if (exec_cmd(av[2], envp) == -1)
-		return (err_log(5));
+		return (-1);
 	return (0);
 }
 
@@ -40,7 +40,7 @@ int parent(char **av, int *fd, char **envp)
 	dup2(file2, STDOUT_FILENO);
 	close(fd[0]);
 	if (exec_cmd(av[3], envp) == -1)
-		return (err_log(6));
+		return (-1);
 	return (0);
 }
 

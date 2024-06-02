@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:40:28 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/05/26 21:57:07 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/05/27 07:32:39 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ int main(int ac, char **av, char **envp)
 		return (err_log(2));
 	id = fork();
 	if (id == 0)
-		child(av, fd, envp);
-	else
 	{
-		waitpid(id, NULL, 0);
-		parent(av, fd, envp);
+		if (child(av, fd, envp) == -1)
+			return (err_log(5));
 	}
+	waitpid(id, NULL, 0);
+	if (parent(av, fd, envp) == -1)
+		return (err_log(6));
 	return (0);
 }
