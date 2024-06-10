@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:47:39 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/10 18:54:28 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:33:11 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ void	err_log(char *str)
 	exit(EXIT_FAILURE);
 }
 
-int	check(int ac, char **av)
+void	check(int ac, char **av)
 {
 	if (ac != 5 || !av)
-		return (err_log("Error: Wrong number of arguments\n"), -1);
-	return (0);
+	{
+		ft_putstr_fd("\033[91mError: Bad arguments\n\e[0m", STDERR_FILENO);
+		ft_putstr_fd("\033[90mEx: ./pipex <file1> <cmd1> <cmd2> <file2>\n\e[0m", STDOUT_FILENO);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	count_args(char **av)
@@ -35,7 +38,7 @@ int	count_args(char **av)
 	return (i - 3);
 }
 
-static void free_double(char **str)
+void free_double(char **str)
 {
 	int i;
 

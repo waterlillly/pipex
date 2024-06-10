@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/10 18:54:49 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:33:31 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	child(int *fd, char **av, char **envp)
+int	child1(int *fd, char **av, char **envp)
 {
 	int	filein;
 
@@ -20,14 +20,14 @@ int	child(int *fd, char **av, char **envp)
 	close(fd[0]);
 	filein = open(av[1], O_RDONLY, 0644);
 	if (filein == -1 || access(av[1], R_OK))
-		return (err_log("Error: Filein failed\n"), -1);
+		return (err_log("\033[91mError: opening filein failed\n\e[0m"), -1);
 	dup2(fd[1], STDOUT_FILENO);
 	if (fd[1] == -1)
-		return (err_log("Error: Dup2 failed\n"), -1);
+		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
 	close(fd[1]);
 	close(filein);
 	if (exec_cmd(av[2], envp))
-		return (err_log("Error: Execve failed\n"), -1);
+		return (err_log("\033[91mError: execve failed\n\e[0m"), -1);
 	return (0);
 }
 
@@ -39,15 +39,15 @@ int child2(int *fd, char **av, char **envp)
 	close(fd[1]);
 	fileout = open(av[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1 || access(av[4], F_OK))
-		return (err_log("Error: Fileout failed\n"), -1);
+		return (err_log("\033[91mError: opening fileout failed\n\e[0m"), -1);
 	dup2(fd[0], STDIN_FILENO);
 	if (fd[0] == -1)
-		return (err_log("Error: Dup2 failed\n"), -1);
+		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[0]);
 	close(fileout);
 	if (exec_cmd(av[3], envp))
-		return (err_log("Error: Execve failed\n"), -1);
+		return (err_log("\033[91mError: execve failed\n\e[0m"), -1);
 	return (0);
 }
 
@@ -62,7 +62,7 @@ char	*find_path(char *path, char *cmd, char **envp)
 		i++;
 	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
-		return (err_log("Error: Split failed\n"), NULL);
+		return (err_log("\033[91mError: split failed\n\e[0m"), NULL);
 	path = is_exec(cmd, paths);
 	i = 0;
 	free_double(paths);
@@ -83,7 +83,7 @@ char	*is_exec(char *cmd, char **paths)
 			part = ft_strjoin(executable, cmd);
 			if (!part)
 			{
-				err_log("Error: Strjoin failed\n");
+				err_log("\033[91mError: ft_strjoin failed\n\e[0m");
 				free(executable);
 				return (NULL);
 			}
@@ -104,12 +104,12 @@ int	exec_cmd(char *cmd, char **envp)
 	path = NULL;
 	args = ft_split(cmd, ' ');
 	if (!args)
-		return (err_log("Error: Split failed\n"), -1);
+		return (err_log("\033[91mError: split failed\n\e[0m"), -1);
 	path = find_path(path, args[0], envp);
 	if (!path)
-		return (err_log("Error: No path found\n"), -1);
+		return (err_log("\033[91mError: no path found\n\e[0m"), -1);
 	if (execve(path, args, envp) == -1)
-		return (err_log("Error: Execve failed\n"), -1);
+		return (err_log("\033[91mError: execve failed\n\e[0m"), -1);
 	free_double(args);
 	free(path);
 	return (0);
