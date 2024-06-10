@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   all.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/10 18:54:49 by lbaumeis         ###   ########.fr       */
+/*   Created: 2024/06/10 15:20:12 by lbaumeis          #+#    #+#             */
+/*   Updated: 2024/06/10 18:47:14 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	err_log(char *str)
+{
+	ft_putstr_fd(str, STDERR_FILENO);
+	exit(EXIT_FAILURE);
+}
+
+int	check(int ac, char **av)
+{
+	if (ac != 5 || !av)
+		return (err_log("Error: Wrong number of arguments\n"), -1);
+	return (0);
+}
 
 int	child(int *fd, char **av, char **envp)
 {
@@ -51,24 +64,6 @@ int child2(int *fd, char **av, char **envp)
 	return (0);
 }
 
-char	*find_path(char *path, char *cmd, char **envp)
-{
-	char	**paths;
-	int		i;
-
-	i = 0;
-	paths = NULL;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
-	paths = ft_split(envp[i] + 5, ':');
-	if (!paths)
-		return (err_log("Error: Split failed\n"), NULL);
-	path = is_exec(cmd, paths);
-	i = 0;
-	free_double(paths);
-	return (path);
-}
-
 char	*is_exec(char *cmd, char **paths)
 {
 	char	*executable;
@@ -96,6 +91,37 @@ char	*is_exec(char *cmd, char **paths)
 	return (NULL);
 }
 
+static void free_double(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+char	*find_path(char *path, char *cmd, char **envp)
+{
+	char	**paths;
+	int		i;
+
+	i = 0;
+	paths = NULL;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+		i++;
+	paths = ft_split(envp[i] + 5, ':');
+	if (!paths)
+		return (err_log("Error: Split failed\n"), NULL);
+	path = is_exec(cmd, paths);
+	i = 0;
+	free_double(paths);
+	return (path);
+}
+
 int	exec_cmd(char *cmd, char **envp)
 {
 	char	**args;
@@ -112,5 +138,55 @@ int	exec_cmd(char *cmd, char **envp)
 		return (err_log("Error: Execve failed\n"), -1);
 	free_double(args);
 	free(path);
+	return (0);
+}
+
+int	count_args(char **av)
+{
+	int i;
+
+	i = 0;
+	while (av[i])
+		i++;
+	return (i - 3);
+}
+
+int main(int ac, char **av, char **envp)
+{
+	int 	fd[2];
+	pid_t	pid[2];
+	int 	c;
+	int 	i;
+
+	i = 0;
+	if(check(ac, av))
+	{
+		ft_putstr_fd("\033[31mError: Bad arguments\n\e[0m", 2);
+		ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+	}
+	if (pipe(fd) == -1)
+		return (err_log("Error: Pipe failed"), -1);
+	c = count_args(av);
+	while (i < c)
+	{
+		pid[i] = fork();
+		if (pid[i] == -1)
+			return (err_log("Error: Fork failed"), -1);
+		if (pid[i] == 0)
+		{
+			if (i == 0 && child(fd, av, envp) == -1)
+				return (err_log("Error: Child exec failed"), -1);
+		//	if (i == 1 && child2(fd, av, envp) == -1)
+			//	return (err_log("Error: Parent exec failed"), -1);
+		}
+		i++;
+	}
+	close(fd[0]);
+	close(fd[1]);
+	while (i > 0)
+	{
+		i--;
+		waitpid(pid[i], NULL, 0);
+	}
 	return (0);
 }

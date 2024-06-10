@@ -6,18 +6,18 @@
 #    By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 20:02:31 by lbaumeis          #+#    #+#              #
-#    Updated: 2024/06/02 17:30:25 by lbaumeis         ###   ########.fr        #
+#    Updated: 2024/06/10 18:58:57 by lbaumeis         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g
 LIB_FLAGS = -L. -lft
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
-CFILES = pipex.c error.c main.c
+CFILES = main.c pipex.c pipex_utils.c
 OFILES = $(CFILES:.c=.o)
 P_NAME = pipex
 
