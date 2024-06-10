@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/02 17:48:03 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/10 11:58:42 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,30 @@
 
 int	child(char **av, int *fd, char **envp)
 {
-	int	file1;
-
+	int	filein;
+	
 	close(fd[0]);
-	file1 = open(av[1], O_RDONLY, 0644);
-	if (file1 == -1)
-		return (err_log(3));
+	filein = open(av[1], O_RDONLY, 0644);
+	if (filein == -1)
+		return (err_log("Error: File1 failed\n"));
 	dup2(fd[1], STDOUT_FILENO);
-	dup2(file1, STDIN_FILENO);
+	dup2(filein, STDIN_FILENO);
 	if (exec_cmd(av[2], envp) == -1)
 		return (-1);
-	//write(fd[1], getpid(), ft_strlen(getpid()));
 	close(fd[1]);
 	return (0);
 }
 
 int parent(char **av, int *fd, char **envp)
 {
-	int	file2;
+	int	fileout;
 	
 	close(fd[1]);
-	file2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (file2 == -1)
-		return (err_log(4));
+	fileout = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fileout == -1)
+		return (err_log("Error: File2 failed\n"));
 	dup2(fd[0], STDIN_FILENO);
-	dup2(file2, STDOUT_FILENO);
+	dup2(fileout, STDOUT_FILENO);
 	close(fd[0]);
 	if (exec_cmd(av[3], envp) == -1)
 		return (-1);
@@ -95,3 +94,5 @@ int	exec_cmd(char *cmd, char **envp)
 		return (-1);
 	return (0);
 }
+
+//https://github.com/gabcollet/pipex/blob/master/srcs/utils.c
