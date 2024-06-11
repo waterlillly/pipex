@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 19:12:01 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/11 19:48:00 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	child1(int *fd, char **av, char **envp)
 {
 	int	filein;
 
-	filein = 0;
 	close(fd[0]);
 	filein = open(av[1], O_RDONLY, 0644);
 	if (filein == -1 || access(av[1], R_OK))
@@ -39,10 +38,9 @@ int	child2(int *fd, char **av, char **envp)
 {
 	int	fileout;
 
-	fileout = 0;
 	close(fd[1]);
 	fileout = open(av[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (fileout == -1 || access(av[4], F_OK))
+	if (fileout == -1 || access(av[4], R_OK || access(av[4], W_OK)))
 		return (close_fds(fd),
 			err_log("\033[91mError: opening fileout failed\n\e[0m"), -1);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
@@ -71,11 +69,8 @@ char	*is_exec(char *cmd, char **paths)
 		{
 			part = ft_strjoin(executable, cmd);
 			if (!part)
-			{
-				err_log("\033[91mError: ft_strjoin failed\n\e[0m");
-				free(executable);
-				return (NULL);
-			}
+				return (free(executable),
+					err_log("\033[91mError: ft_strjoin failed\n\e[0m"), NULL);
 			free(executable);
 			if (access(part, X_OK) == 0)
 				return (part);
@@ -115,8 +110,9 @@ int	exec_cmd(char *cmd, char **envp)
 	path = find_path(path, args[0], envp);
 	if (!path)
 		return (err_log("\033[91mError: no path found\n\e[0m"), -1);
-	execve(path, args, envp);
+	if (execve(path, args, envp) == -1)
+		return (err_log("\033[91mError: execve failed\n\e[0m"), -1);
 	free_double(args);
 	free(path);
-	return (1);
+	return (0);
 }
