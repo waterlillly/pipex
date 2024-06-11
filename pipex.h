@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 20:02:40 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 14:47:46 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:12:01 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <fcntl.h>
+
 
 /*PIPEX*/
 int		child1(int *fd, char **av, char **envp);

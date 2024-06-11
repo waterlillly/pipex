@@ -3,16 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+         #
+#    By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 20:02:31 by lbaumeis          #+#    #+#              #
-#    Updated: 2024/06/11 14:36:26 by lbaumeis         ###   ########.fr        #
+#    Updated: 2024/06/11 17:56:36 by lbaumeis         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
-LIB_FLAGS = -L. -lft
+CFLAGS = -Wall -Werror -Wextra
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -24,12 +23,15 @@ P_NAME = pipex
 all: $(P_NAME)
 
 $(P_NAME): $(OFILES)
-	$(CC) $(CFLAGS) -o $@ $^ $(LIB_FLAGS)
+	($(MAKE) -C ./libft)
+	$(CC) $(CFLAGS) -o $@ $^ ./libft/libft.a
 
 clean:
+	($(MAKE) -C ./libft clean)
 	rm -f $(OFILES)
 
 fclean: clean
+	($(MAKE) -C ./libft fclean)
 	rm -f $(P_NAME)
 
 re: fclean all
