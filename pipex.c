@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 18:28:21 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/11 19:12:01 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@ int	child1(int *fd, char **av, char **envp)
 	close(fd[0]);
 	filein = open(av[1], O_RDONLY, 0644);
 	if (filein == -1 || access(av[1], R_OK))
-		return (err_log("\033[91mError: opening filein failed\n\e[0m"), -1); //close all fds
+		return (close_fds(fd),
+			err_log("\033[91mError: opening filein failed\n\e[0m"), -1);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1); //close all fds
-	if(dup2(filein, STDIN_FILENO) == -1)
-		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1); //close all fds
+		return (close_fds(fd),
+			err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
+	if (dup2(filein, STDIN_FILENO) == -1)
+		return (close_fds(fd),
+			err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
 	close(fd[1]);
 	close(filein);
 	if (exec_cmd(av[2], envp))
@@ -40,11 +43,14 @@ int	child2(int *fd, char **av, char **envp)
 	close(fd[1]);
 	fileout = open(av[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1 || access(av[4], F_OK))
-		return (err_log("\033[91mError: opening fileout failed\n\e[0m"), -1); //close all fds
+		return (close_fds(fd),
+			err_log("\033[91mError: opening fileout failed\n\e[0m"), -1);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
-		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1); //close all fds
-	if(dup2(fileout, STDOUT_FILENO) == -1)
-		return (err_log("\033[91mError: dup2 failed\n\e[0m"), -1); //close all fds
+		return (close_fds(fd),
+			err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
+	if (dup2(fileout, STDOUT_FILENO) == -1)
+		return (close_fds(fd),
+			err_log("\033[91mError: dup2 failed\n\e[0m"), -1);
 	close(fileout);
 	close(fd[0]);
 	if (exec_cmd(av[3], envp))
@@ -78,7 +84,6 @@ char	*is_exec(char *cmd, char **paths)
 	}
 	return (NULL);
 }
-
 
 char	*find_path(char *path, char *cmd, char **envp)
 {
