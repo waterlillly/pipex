@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 20:02:40 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 19:52:10 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:43:01 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ char	*is_exec(char *cmd, char **paths);
 int		exec_cmd(char *cmd, char **envp);
 
 /*PIPEX_UTILS*/
-void	err_log(char *str);
+void	close_fds(int fd_0, int fd_1, int file);
 void	check(int ac, char **av);
-int		count_args(char **av);
 void	free_double(char **str);
+void	check_filein(char **av);
+void	check_fileout(char **av);
 
 /*PIPEX_UTILS2*/
-void	close_fds(int *fd);
 void	handle_child_processes(int i, int *fd, char **av, char **envp);
 void	create_processes(pid_t *pid, int *fd, char **av, char **envp);
-void	wait_for_processes(pid_t *pid);
+int 	wait_for_processes(pid_t *pid);
 
 #endif

@@ -6,26 +6,26 @@
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:47:39 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 19:57:45 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:11:14 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	err_log(char *str)
+void	close_fds(int fd_0, int fd_1, int file)
 {
-	ft_putstr_fd(str, STDERR_FILENO);
-	exit(EXIT_FAILURE);
+	if (fd_0 != -1)
+		close(fd_0);
+	if (fd_1 != -1)
+		close(fd_1);
+	if (file)
+		close(file);
 }
 
 void	check(int ac, char **av)
 {
 	if (ac != 5 || !av)
-	{
-		ft_putstr_fd("\033[90mEx:./pipex <file1> <cmd1> <cmd2> <file2>\n\e[0m",
-			STDOUT_FILENO);
-		err_log("\033[91mError: Bad arguments\n\e[0m");
-	}
+		exit(EXIT_FAILURE);
 }
 
 void	free_double(char **str)

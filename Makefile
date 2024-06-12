@@ -6,12 +6,12 @@
 #    By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 20:02:31 by lbaumeis          #+#    #+#              #
-#    Updated: 2024/06/11 17:56:36 by lbaumeis         ###   ########.fr        #
+#    Updated: 2024/06/12 17:55:09 by lbaumeis         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@

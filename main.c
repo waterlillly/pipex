@@ -6,7 +6,7 @@
 /*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:40:28 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/11 18:11:55 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:43:10 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ int	main(int ac, char **av, char **envp)
 	pid_t	pid[2];
 
 	check(ac, av);
+	check_filein(av);
+	check_fileout(av);
 	if (pipe(fd) == -1)
-		return (err_log("\033[91mError: pipe failed\n\e[0m"), -1);
+		exit(EXIT_FAILURE);
 	create_processes(pid, fd, av, envp);
-	close_fds(fd);
-	wait_for_processes(pid);
-	return (0);
+	close_fds(fd[0], fd[1], 0);
+	return (wait_for_processes(pid));
 }
