@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 15:24:20 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/12 18:26:45 by lbaumeis         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
 int	child1(int *fd, char **av, char **envp)
@@ -76,22 +64,14 @@ char	*is_exec(char *cmd, char **paths, char **args)
 	while (*paths)
 	{
 		executable = ft_strjoin(paths[0], "/");
-			if (!executable)
-			{
-				free(part);
-				free_double(args);
-				exit(EXIT_FAILURE);
-				}
+		if (!executable)
+			return (free(part), free_double(args), exit(EXIT_FAILURE), NULL);
 		if (executable)
 		{
 			part = ft_strjoin(executable, cmd);
 			free(executable);
 			if (!part)
-			{
-				free_double(args);
-				free(part);
-				exit(EXIT_FAILURE);
-				}
+				return (free_double(args), exit(EXIT_FAILURE), NULL);
 			if (access(part, X_OK) == 0)
 				return (part);
 			free(part);
@@ -115,7 +95,7 @@ char	*find_path(char *path, char *cmd, char **envp, char **args)
 	{
 		free_double(args);
 		exit(EXIT_FAILURE);
-		}
+	}
 	path = is_exec(cmd, paths, args);
 	free_double(paths);
 	if (!path)
