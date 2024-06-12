@@ -64,7 +64,7 @@ int	child2(int *fd, char **av, char **envp)
 	exit(EXIT_FAILURE);
 }
 
-char	*is_exec(char *cmd, char **paths)
+char	*is_exec(char *cmd, char **paths, char **args)
 {
 	char	*executable;
 	char	*part;
@@ -75,13 +75,23 @@ char	*is_exec(char *cmd, char **paths)
 		return(cmd);
 	while (*paths)
 	{
-		executable = ft_strjoin(paths[0], "/"); // protect 
+		executable = ft_strjoin(paths[0], "/");
+			if (!executable)
+			{
+				free(part);
+				free_double(args);
+				exit(EXIT_FAILURE);
+				}
 		if (executable)
 		{
 			part = ft_strjoin(executable, cmd);
 			free(executable);
 			if (!part)
-				exit(EXIT_FAILURE); //free args
+			{
+				free_double(args);
+				free(part);
+				exit(EXIT_FAILURE);
+				}
 			if (access(part, X_OK) == 0)
 				return (part);
 			free(part);
@@ -91,7 +101,7 @@ char	*is_exec(char *cmd, char **paths)
 	return (NULL);
 }
 
-char	*find_path(char *path, char *cmd, char **envp)
+char	*find_path(char *path, char *cmd, char **envp, char **args)
 {
 	char	**paths;
 	int		i;
@@ -102,8 +112,11 @@ char	*find_path(char *path, char *cmd, char **envp)
 		i++;
 	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
-		exit(EXIT_FAILURE); //free args
-	path = is_exec(cmd, paths);
+	{
+		free_double(args);
+		exit(EXIT_FAILURE);
+		}
+	path = is_exec(cmd, paths, args);
 	free_double(paths);
 	if (!path)
 	{
@@ -122,7 +135,7 @@ int	exec_cmd(char *cmd, char **envp)
 	args = ft_split(cmd, ' ');
 	if (!args)
 		exit(EXIT_FAILURE);
-	path = find_path(path, args[0], envp);
+	path = find_path(path, args[0], envp, args);
 	if (!path)
 	{
 		free_double(args);
