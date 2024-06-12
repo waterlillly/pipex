@@ -25,8 +25,8 @@
 /*PIPEX*/
 int		child1(int *fd, char **av, char **envp);
 int		child2(int *fd, char **av, char **envp);
-char	*find_path(char *path, char *cmd, char **envp);
-char	*is_exec(char *cmd, char **paths);
+char	*find_path(char *path, char *cmd, char **envp, char **args);
+char	*is_exec(char *cmd, char **paths, char **args);
 int		exec_cmd(char *cmd, char **envp);
 
 /*PIPEX_UTILS*/
