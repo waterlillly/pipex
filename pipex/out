@@ -1,4 +1,0 @@
-#include "pipex.h"
-	t_pipex	p;
-		exit(EXIT_FAILURE);
-		exit(EXIT_FAILURE);
