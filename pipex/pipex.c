@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 06:41:43 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/13 18:38:19 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:11:42 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ char	*is_exec(t_pipex *p)
 		if (!p->executable)
 			err_free(p);
 		p->part = ft_strjoin(p->executable, p->cmd);
-		free(p->executable);
 		if (!p->part)
 			err_free(p);
+		free(p->executable);
 		if (access(p->part, X_OK) == 0)
 			return (p->part);
 		free(p->part);
@@ -57,7 +57,6 @@ void	exec_cmd(char **av, int x, t_pipex *p, char **envp)
 	if (!p->path)
 	{
 		p->other = 1;
-		ft_putstr_fd("\033[91mError: Command not found\n\e[0m", 2);
 		err_free(p);
 	}
 	execve(p->path, p->args, envp);

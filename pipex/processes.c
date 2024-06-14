@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumeis <lbaumeis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumeis <lbaumeis@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 06:41:51 by lbaumeis          #+#    #+#             */
-/*   Updated: 2024/06/13 19:15:32 by lbaumeis         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:15:17 by lbaumeis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ int	wait_for_processes(t_pipex *p)
 	close_fds(p);
 	while (i < 2)
 	{
-		if (waitpid(p->pid[i], &p->status, 0) == -1)
-			err_free(p);
 		if (WIFEXITED(p->status))
 			p->status = WEXITSTATUS(p->status);
+		if (waitpid(p->pid[i], &p->status, 0) == -1)
+			err_free(p);
 		i++;
 	}
 	return (p->status);
