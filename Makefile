@@ -14,25 +14,25 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-CFILES = main.c pipex.c check_free_close.c processes.c
+CFILES = src/main.c src/pipex.c src/check_free_close.c src/processes.c
 OFILES = $(CFILES:.c=.o)
 P_NAME = pipex
 
 all: $(P_NAME)
 
 $(P_NAME): $(OFILES)
-	($(MAKE) -C ./libft)
-	$(CC) $(CFLAGS) -o $@ $^ ./libft/libft.a
+	@($(MAKE) -C ./libft)
+	@$(CC) $(CFLAGS) -o $@ $^ ./libft/libft.a
 
 clean:
-	($(MAKE) -C ./libft clean)
-	rm -f $(OFILES)
+	@($(MAKE) -C ./libft clean)
+	@rm -f $(OFILES)
 
 fclean: clean
-	($(MAKE) -C ./libft fclean)
-	rm -f $(P_NAME)
+	@($(MAKE) -C ./libft fclean)
+	@rm -f $(P_NAME)
 
 re: fclean all
 
